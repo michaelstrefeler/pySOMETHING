@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <h4>Register</h4>
+    {% from "includes/_formhelpers.html" import render_field %}
+    <form method = "POST">
+        <div class="row">
+            <div class="six columns">
+                {{render_field(form.name, class_="u-full-width", placeholder="John Doe", id="FullName")}}
+            </div>
+            <div class="six columns">
+                {{render_field(form.email, class="u-full-width", placeholder="john.doe@mail.com", id="email", type="email")}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="six columns">
+                 {{render_field(form.password, class="u-full-width", placeholder="Good password", id="password")}}
+            </div>
+            <div class="six columns">
+                {{render_field(form.confirm, class="u-full-width", placeholder="Same password", id="confirm")}}
+            </div>
+        </div>
+
+        <input class="button-primary" value="Submit" type="submit">
+    </form>
+{% endblock %}

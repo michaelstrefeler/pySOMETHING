@@ -1,0 +1,19 @@
+{% extends 'layout.html' %} {% block body %}
+<h4>Log in</h4>
+
+<form method="POST">
+    <div class="row">
+        <div class="six columns">
+            <label for="email">Enter your email</label>
+            <input type="email" class="u-full-width" placeholder="best.email@mail.com" id="email" name="email">
+        </div>
+    </div>    
+    <div class="row">
+        <div class="six columns">
+            <label for="password">And your password</label>
+            <input type="password" class="u-full-width" id="password" placeholder="P@ssword!" name="password">
+        </div>
+    </div>
+    <input class="button-primary" value="Submit" type="submit">
+</form>
+{% endblock %}

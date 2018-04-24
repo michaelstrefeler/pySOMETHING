@@ -1,0 +1,42 @@
+<div class="navbar-spacer"></div>
+<nav class="navbar">
+    <div class="container">
+        <ul class="navbar-list">
+            <li class="navbar-item">
+                <a class="navbar-link" href="/">Home</a>
+            </li>
+            <li class="navbar-item">
+                <a class="navbar-link" href="/about">About</a>
+            </li>
+            <!--<li class="navbar-item">
+                <a class="navbar-link" href="#" data-popover="#moreNavPopover">More</a>
+                <div id="moreNavPopover" class="popover">
+                    <ul class="popover-list">
+                        <li class="popover-item">
+                            <a class="popover-link" href="https://github.com/dhg/Skeleton">On Github</a>
+                        </li>
+                        <li class="popover-item">
+                            <a class="popover-link" href="https://github.com/dhg/Skeleton#browser-support">Browsers</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>-->
+            {% if session.logged_in %}
+                <li class="navbar-item" style="float:right">
+                    <a class="navbar-link" href="/logout">Logout</a>
+                </li>
+                <li class="navbar-item" style="float:right">
+                    <a class="navbar-link" href="/dashboard">Dashboard</a>
+                </li>
+            {% else %}
+                <li class="navbar-item" style="float:right">
+                    <a class="navbar-link" href="/register">Register</a>
+                </li>
+                <li class="navbar-item" style="float:right">
+                    <a class="navbar-link" href="/login">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<br>
