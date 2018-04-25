@@ -1,10 +1,20 @@
 {% extends 'layout.html' %}
 {% block body %}
+<style>
+    .content {
+        padding: 0 18px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        width: 100%;
+    }
+</style>
     <h4>Welcome, <small>{{session['user']}}</small></h4>
     <h5>My lists</h5>
     <div class="row">
         <div class="six columns">
-            <h6>People</h6>
+            <button class="collapsible">People</button>
+            <div class="content">
             <table class="u-full-width">
                 <thead>
                     <tr>
@@ -29,9 +39,11 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
         <div class="six columns">
-            <h6>Stuff to buy</h6>
+            <button class="collapsible">Stuff to buy</button>
+            <div class="content">
             <table class="u-full-width">
                 <thead>
                     <tr>
@@ -56,8 +68,25 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <h5>My calendars</h5>
-    
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
 {% endblock %}
