@@ -112,14 +112,26 @@ def logout():
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
-    return render_template('dashboard.html')
-
-# Lists
-@app.route('/lists')
-def lists():
     cursor = mysql.connection.cursor()
 
     result = cursor.execute("SELECT * FROM t_list")
+
+    lists = cursor.fetchall()
+
+    if result > 0:
+        return render_template('dashboard.html', lists = lists)
+    else:
+        error = "You don't have any lists"
+        return render_template('dashboard.html', error = error)    
+    cursor.close()
+
+# Lists
+@app.route('/lists')
+@is_logged_in
+def lists():
+    cursor = mysql.connection.cursor()
+
+    result = cursor.execute("SELECT * FROM t_list WHERE lis_author = %s", [session['user']])
 
     lists = cursor.fetchall()
 
@@ -133,6 +145,7 @@ def lists():
 
 # Single list
 @app.route('/list/<int:id>')
+@is_logged_in
 def list(id):
     cursor = mysql.connection.cursor()
 

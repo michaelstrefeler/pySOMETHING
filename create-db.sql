@@ -26,6 +26,7 @@ CREATE TABLE t_user(
 CREATE TABLE t_list(
         idList    int (11) Auto_increment  NOT NULL ,
         lis_title Varchar (100) NOT NULL ,
+        lis_author VARCHAR(255) NOT NULL,
         PRIMARY KEY (idList )
 )ENGINE=InnoDB;
 

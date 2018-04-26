@@ -11,66 +11,26 @@
 </style>
     <h4>Welcome, <small>{{session['user']}}</small></h4>
     <h5>My lists</h5>
-    <div class="row">
-        <div class="six columns">
-            <button class="collapsible">People</button>
-            <div class="content">
-            <table class="u-full-width">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Age</th>
-                        <th>Sex</th>
-                        <th>Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Dave Gamache</td>
-                        <td>26</td>
-                        <td>Male</td>
-                        <td>San Francisco</td>
-                    </tr>
-                    <tr>
-                        <td>Dwayne Johnson</td>
-                        <td>42</td>
-                        <td>Male</td>
-                        <td>Hayward</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-        <div class="six columns">
-            <button class="collapsible">Stuff to buy</button>
-            <div class="content">
-            <table class="u-full-width">
-                <thead>
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Amount</th>
-                        <th>Price</th>
-                        <th>Store</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>NZXT H700i</td>
-                        <td>1</td>
-                        <td>215.41</td>
-                        <td>Digitec</td>
-                    </tr>
-                    <tr>
-                        <td>be quiet! Dark Rock 3</td>
-                        <td>1</td>
-                        <td>75.21</td>
-                        <td>Digitec</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-        </div>
-    </div>
+    <table class="u-full-width">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for list in lists %}
+                <tr>
+                    <td>{{list.idList}}</td>
+                    <td>{{list.lis_title}}</td>
+                    <td><button>Edit</button></td>
+                    <td><button>Delete</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     <h5>My calendars</h5>
 
     <script>

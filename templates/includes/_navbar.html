@@ -8,10 +8,10 @@
             <li class="navbar-item">
                 <a class="navbar-link" href="/about">About</a>
             </li>
-            <li class="navbar-item">
-                <a class="navbar-link" href="/lists">Lists</a>
-            </li>
             {% if session.logged_in %}
+                <li class="navbar-item">
+                    <a class="navbar-link" href="/lists">Lists</a>
+                </li>
                 <li class="navbar-item" style="float:right">
                     <a class="navbar-link" href="/logout">Logout</a>
                 </li>
