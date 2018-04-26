@@ -243,3 +243,10 @@
   margin-bottom: 1rem;
   border-radius: 5px
 }
+
+.list{
+  padding: 2em;
+  border: 1px solid black;
+  width: initial;
+  margin-left: 24% !important;
+}

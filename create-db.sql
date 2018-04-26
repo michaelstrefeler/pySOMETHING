@@ -37,7 +37,7 @@ CREATE TABLE t_list(
 CREATE TABLE t_item(
         idItem          int (11) Auto_increment  NOT NULL ,
         ite_description Varchar (100) NOT NULL ,
-        ite_is_done     Bool NOT NULL ,
+        ite_is_done     Bool NOT NULL DEFAULT '0',
         PRIMARY KEY (idItem )
 )ENGINE=InnoDB;
 

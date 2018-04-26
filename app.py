@@ -85,7 +85,8 @@ def login():
             return render_template('login.html', error = error)
         else:
             error = 'No user found'
-            return render_template('login.html', error = error)       
+            return render_template('login.html', error = error)
+        cursor.close()       
     return render_template('login.html')   
 
 # Check if user logged in
@@ -107,10 +108,45 @@ def logout():
     flash('You are now logged out', 'success')
     return redirect(url_for('login'))
 
+# Dashboard
 @app.route('/dashboard')
 @is_logged_in
 def dashboard():
     return render_template('dashboard.html')
+
+# Lists
+@app.route('/lists')
+def lists():
+    cursor = mysql.connection.cursor()
+
+    result = cursor.execute("SELECT * FROM t_list")
+
+    lists = cursor.fetchall()
+
+    if result > 0:
+        return render_template('lists.html', lists = lists)
+    else:
+        error = 'No lists found'
+        return render_template('lists.html', error = error)    
+
+    cursor.close()
+
+# Single list
+@app.route('/list/<int:id>')
+def list(id):
+    cursor = mysql.connection.cursor()
+
+    result = cursor.execute("SELECT lis_title AS title, t_item.ite_description AS description FROM t_list NATURAL JOIN contains, t_item WHERE t_item.idItem = contains.idItem AND t_list.idList = %s", [id])
+
+    list = cursor.fetchall()
+
+    if result > 0:
+        return render_template('list.html', list = list, result = result)
+    elif result == 0:
+        error = 'No list has that id'
+        return render_template('list.html', error = error)
+    
+    cursor.close()
 
 if __name__ == '__main__':
     app.secret_key = '$2a$12$xRQceJ9HJgc0gPOFub84EuM2bH1OKiYCisnVg1OZLwTZG/AZAMd9a'

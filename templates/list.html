@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block body %}
+    {% if list %}
+    <div class="row">
+        <div class="list six columns">
+            <h4>{{list[0].title}}</h4>
+            <ul>
+            {% for i in range(0, result) %}
+                <li>{{list[i].description}}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>    
+    {% else %}
+        <a href="/lists"><h5>Back</h5></a>
+    {% endif %}
+{% endblock %}

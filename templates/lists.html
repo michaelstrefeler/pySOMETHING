@@ -1,0 +1,10 @@
+{% extends 'layout.html' %} {% block body %}
+<h4>Lists</h4>
+<ul>
+    {% for list in lists %}
+    <li>
+        <a href="list/{{list.idList}}">{{list.lis_title}}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
