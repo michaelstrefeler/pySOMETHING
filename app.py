@@ -114,7 +114,7 @@ def logout():
 def dashboard():
     cursor = mysql.connection.cursor()
 
-    result = cursor.execute("SELECT * FROM t_list")
+    result = cursor.execute("SELECT * FROM t_list WHERE lis_author = %s", [session['user']])
 
     lists = cursor.fetchall()
 
@@ -149,17 +149,48 @@ def lists():
 def list(id):
     cursor = mysql.connection.cursor()
 
-    result = cursor.execute("SELECT lis_title AS title, t_item.ite_description AS description FROM t_list NATURAL JOIN contains, t_item WHERE t_item.idItem = contains.idItem AND t_list.idList = %s", [id])
+    result = cursor.execute("SELECT lis_title AS title, lis_author, t_item.ite_description AS description FROM t_list NATURAL JOIN contains, t_item WHERE t_item.idItem = contains.idItem AND t_list.idList = %s AND lis_author = %s", ([id], [session['user']]))
 
     list = cursor.fetchall()
 
     if result > 0:
         return render_template('list.html', list = list, result = result)
     elif result == 0:
-        error = 'No list has that id'
+        error = 'None of your lists have that id'
         return render_template('list.html', error = error)
     
     cursor.close()
+
+# List form class
+class ListForm(Form):
+    title = StringField('List title', validators = [Length(min = 4, max = 100)])
+    items = TextAreaField('List items', validators = [Length(min = 4)])
+
+# Add list
+@app.route('/addList', methods = ['GET', 'POST'])
+@is_logged_in
+def addList():
+    form = ListForm(request.form)
+    if request.method == 'POST' and form.validate():
+        title = form.title.data
+        items = form.items.data
+        
+        # Create cursor
+        cursor = mysql.connection.cursor()
+
+        # Execute query
+        cursor.execute("INSERT INTO t_list(lis_title, lis_author) VALUES(%s, %s)", (title, [session['user']]))
+
+        # Commit to database
+        mysql.connection.commit()
+
+        # Close cursor
+        cursor.close()
+
+        flash('Your list has been added', 'success')
+
+        return redirect(url_for('lists'))
+    return render_template('addList.html', form = form)
 
 if __name__ == '__main__':
     app.secret_key = '$2a$12$xRQceJ9HJgc0gPOFub84EuM2bH1OKiYCisnVg1OZLwTZG/AZAMd9a'

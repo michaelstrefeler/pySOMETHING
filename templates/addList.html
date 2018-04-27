@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <h4>Add a new list</h4>
+     {% from "includes/_formhelpers.html" import render_field %}
+    <form method="POST">
+        <div class="row">
+            <div class="twelve columns">
+                {{render_field(form.title, class_="u-full-width", placeholder="List title", id="title")}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+                {{render_field(form.items, class_="u-full-width", id="items")}}
+            </div>
+        </div>
+        <br>
+        <input class="button-primary" value="Submit" type="submit">
+    </form>
+{% endblock %}

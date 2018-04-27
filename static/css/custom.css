@@ -250,3 +250,7 @@
   width: initial;
   margin-left: 24% !important;
 }
+
+textarea{
+  height: 12em;
+}
