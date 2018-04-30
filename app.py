@@ -209,6 +209,33 @@ def addList():
         return redirect(url_for('lists'))
     return render_template('addList.html', form = form)
 
+# Edit list
+@app.route('/edit_list/<int:id>', methods=['GET', 'POST'])
+@is_logged_in
+def edit_list(id):
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("SELECT idList,lis_title,lis_author, t_item.ite_description FROM t_list NATURAL JOIN t_item WHERE t_item.for_list = idList AND idList = %s AND lis_author = %s ",([id], [session['user']]))
+
+    list = cursor.fetchall()
+
+    form = ListForm(request.form)
+
+    # Populate form fields
+    form.title.data = "A"
+
+    list_items = []
+    for i in range(0, len(list)):
+        list_items.append(list[i]['ite_description'])
+
+    list_items = str(list_items)
+    list_items = list_items.replace('[', '')
+    list_items = list_items.replace(']', '')
+    list_items = list_items.replace(',', '\n')
+    list_items = list_items.replace('\'', '')
+    form.items.data = list_items
+    return render_template('edit_list.html', form=form)
+
 if __name__ == '__main__':
     app.secret_key = '$2a$12$xRQceJ9HJgc0gPOFub84EuM2bH1OKiYCisnVg1OZLwTZG/AZAMd9a'
     app.run(debug=True)
