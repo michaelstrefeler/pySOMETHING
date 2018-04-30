@@ -5,6 +5,7 @@ from functools import wraps
 from passlib.hash import bcrypt_sha256
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from wtforms.validators import (DataRequired, Regexp, ValidationError, Email, Length, EqualTo)
+import time
 
 app = Flask(__name__)
 
@@ -67,11 +68,11 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password_candidate = request.form['password']
-        
+
         cursor = mysql.connection.cursor()
 
         result = cursor.execute("SELECT * FROM t_user WHERE use_email = %s", [email])
-        
+
         if result > 0:
             data = cursor.fetchone()
             password = data['password']
@@ -86,8 +87,8 @@ def login():
         else:
             error = 'No user found'
             return render_template('login.html', error = error)
-        cursor.close()       
-    return render_template('login.html')   
+        cursor.close()
+    return render_template('login.html')
 
 # Check if user logged in
 def is_logged_in(f):
@@ -122,7 +123,7 @@ def dashboard():
         return render_template('dashboard.html', lists = lists)
     else:
         error = "You don't have any lists"
-        return render_template('dashboard.html', error = error)    
+        return render_template('dashboard.html', error = error)
     cursor.close()
 
 # Lists
@@ -139,7 +140,7 @@ def lists():
         return render_template('lists.html', lists = lists)
     else:
         error = 'No lists found'
-        return render_template('lists.html', error = error)    
+        return render_template('lists.html', error = error)
 
     cursor.close()
 
@@ -149,7 +150,7 @@ def lists():
 def list(id):
     cursor = mysql.connection.cursor()
 
-    result = cursor.execute("SELECT lis_title AS title, lis_author, t_item.ite_description AS description FROM t_list NATURAL JOIN contains, t_item WHERE t_item.idItem = contains.idItem AND t_list.idList = %s AND lis_author = %s", ([id], [session['user']]))
+    result = cursor.execute("SELECT idList,`lis_title`,lis_author, t_item.ite_description FROM `t_list` NATURAL JOIN t_item WHERE t_item.for_list = idList AND idList = %s AND lis_author = %s ",([id], [session['user']]))
 
     list = cursor.fetchall()
 
@@ -158,7 +159,7 @@ def list(id):
     elif result == 0:
         error = 'None of your lists have that id'
         return render_template('list.html', error = error)
-    
+
     cursor.close()
 
 # List form class
@@ -167,23 +168,39 @@ class ListForm(Form):
     items = TextAreaField('List items', validators = [Length(min = 4)])
 
 # Add list
-@app.route('/addList', methods = ['GET', 'POST'])
+@app.route('/add_list', methods = ['GET', 'POST'])
 @is_logged_in
 def addList():
     form = ListForm(request.form)
     if request.method == 'POST' and form.validate():
         title = form.title.data
         items = form.items.data
-        
+        arr_item = items.splitlines()
+
         # Create cursor
         cursor = mysql.connection.cursor()
 
-        # Execute query
+        ###### Adding list ######
+        # Executing query
         cursor.execute("INSERT INTO t_list(lis_title, lis_author) VALUES(%s, %s)", (title, [session['user']]))
 
         # Commit to database
         mysql.connection.commit()
+        # Close cursor
+        cursor.close()
 
+        # Getting the ID of the list that was just added
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT idList FROM t_list ORDER BY idList DESC LIMIT 1")
+        list_id = cursor.fetchone()
+        cursor.close()
+        ###### Adding the items ######
+        # Create cursor
+        cursor = mysql.connection.cursor()
+        for item in arr_item:
+            cursor.execute(
+                "INSERT INTO t_item(ite_description, for_list) VALUES(%s, %s)",([item], [list_id['idList']]))
+            mysql.connection.commit()
         # Close cursor
         cursor.close()
 
@@ -194,4 +211,4 @@ def addList():
 
 if __name__ == '__main__':
     app.secret_key = '$2a$12$xRQceJ9HJgc0gPOFub84EuM2bH1OKiYCisnVg1OZLwTZG/AZAMd9a'
-    app.run(debug=True)    
+    app.run(debug=True)

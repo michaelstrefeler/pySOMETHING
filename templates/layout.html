@@ -38,15 +38,6 @@
         <!-- End Document -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script src="{{ url_for('static', filename='js/site.js')}}"></script>
-        <script type="text/javascript">
-        $('items').val = "○ "
-        $('#items').keypress(function (e) {
-                if (e.keyCode == 13) {
-                    // alert($('textarea').val());
-                    $('textarea').val($('textarea').val() + '○ ');
-                }
-            });
-        </script>
     </body>
 
 </html>

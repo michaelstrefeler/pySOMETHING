@@ -39,6 +39,7 @@ CREATE TABLE t_item(
         idItem          int (11) Auto_increment  NOT NULL ,
         ite_description Varchar (100) NOT NULL ,
         ite_is_done     Bool NOT NULL DEFAULT '0',
+        for_list        int(5) NOT NULL,
         PRIMARY KEY (idItem )
 )ENGINE=InnoDB;
 
@@ -70,17 +71,6 @@ CREATE TABLE t_event(
 
 
 #------------------------------------------------------------
-# contains
-#------------------------------------------------------------
-
-CREATE TABLE contains(
-        idList Int NOT NULL ,
-        idItem Int NOT NULL ,
-        PRIMARY KEY (idList ,idItem )
-)ENGINE=InnoDB;
-
-
-#------------------------------------------------------------
 # cal_events
 #------------------------------------------------------------
 
@@ -101,8 +91,6 @@ CREATE TABLE uses(
         PRIMARY KEY (idUser ,idCalendar )
 )ENGINE=InnoDB;
 
-ALTER TABLE contains ADD CONSTRAINT FK_contains_idList FOREIGN KEY (idList) REFERENCES t_list(idList);
-ALTER TABLE contains ADD CONSTRAINT FK_contains_idItem FOREIGN KEY (idItem) REFERENCES t_item(idItem);
 ALTER TABLE cal_events ADD CONSTRAINT FK_cal_events_idCalendar FOREIGN KEY (idCalendar) REFERENCES t_calendar(idCalendar);
 ALTER TABLE cal_events ADD CONSTRAINT FK_cal_events_idEvent FOREIGN KEY (idEvent) REFERENCES t_event(idEvent);
 ALTER TABLE uses ADD CONSTRAINT FK_uses_idUser FOREIGN KEY (idUser) REFERENCES t_user(idUser);

@@ -3,11 +3,11 @@
     {% if list %}
     <div class="row">
         <div class="list six columns">
-            <h4>{{list[0].title}}</h4>
+            <h4>{{list[0].lis_title}}</h4>
             <hr style="margin-top: 0">
             <ul>
             {% for i in range(0, result) %}
-                <li>{{list[i].description}}</li>
+                <li>{{list[i].ite_description}}</li>
             {% endfor %}
             </ul>
         </div>
