@@ -236,6 +236,31 @@ def edit_list(id):
     form.items.data = list_items
     return render_template('edit_list.html', form=form)
 
+# Delete list
+@app.route('/delete_list/<int:id>', methods=['POST'])
+@is_logged_in
+def delete_list(id):
+    # Create cursor
+    csr = mysql.connection.cursor()
+    
+    # Delete article
+    csr.execute("DELETE FROM t_list WHERE idList = %s",[id])
+    
+    # Commit to DB
+    mysql.connection.commit()
+    
+    # Close cursor
+    csr.close()
+
+    csr = mysql.connection.cursor()
+
+    csr.execute("DELETE FROM t_item WHERE for_list = %s", [id])
+    mysql.connection.commit()
+    csr.close()
+
+    flash('Article Deleted', 'success')
+    return redirect(url_for('dashboard'))
+
 if __name__ == '__main__':
     app.secret_key = '$2a$12$xRQceJ9HJgc0gPOFub84EuM2bH1OKiYCisnVg1OZLwTZG/AZAMd9a'
     app.run(debug=True)

@@ -26,7 +26,12 @@
                     <td>{{list.idList}}</td>
                     <td>{{list.lis_title}}</td>
                     <td><a class="button" href="/edit_list/{{list.idList}}">Edit</a></td>
-                    <td><button>Delete</button></td>
+                    <td>
+                        <form style="margin-top:5px; margin-bottom:5px" action="{{url_for('delete_list', id=list.idList)}}" method="POST">
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="submit" value="Delete" class="button">
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
