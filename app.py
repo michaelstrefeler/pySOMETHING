@@ -222,7 +222,7 @@ def edit_list(id):
     form = ListForm(request.form)
 
     # Populate form fields
-    form.title.data = "A"
+    form.title.data = list[0]['lis_title']
 
     list_items = []
     for i in range(0, len(list)):
